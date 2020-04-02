@@ -6,7 +6,11 @@ cut -f1-5 wgbs_inter_tab >wgbs
 cut -f6-10 wgbs_inter_tab >tab
 python3 ../src/format_as_mlml.py wgbs wgbs_format
 python3 ../src/format_as_mlml.py tab tab_format
-../MethPipe/bin/mlml -v -u wgbs_format -h tab_format  -o data_mlml
+
+##The program will use libgsl.so.19, you have to first find the location and assign the absoluate direction
+LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/projects/li-lab/Ziwei/Anaconda3/lib  #The path to your libgsl.so.19 folder
+export LD_LIBRARY_PATH
+../MethPipe/bin/mlml -v -u wgbs_format -h tab_format -o data_mlml
 cut -f5,10 wgbs_inter_tab >wgbs_tab_cov
 paste data_mlml wgbs_tab_cov >data_mlml_cov
 cut -f1-5,8-9 data_mlml_cov >data_mlml_mc_hmc_cov

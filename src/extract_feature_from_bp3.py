@@ -32,7 +32,7 @@ with open(coord_file) as f:
 		if l[0] in coord_chr:
 			coord_chr[l[0]].append(int(l[1]))
 		else:
-			coord_chr[l[0]]=[int(l[1])]
+			coord_chr[l[0]]=int(l[1])
 #print(coord_chr)
 
 #extract chr size

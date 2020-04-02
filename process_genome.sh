@@ -3,7 +3,7 @@ PWD=/projects/li-lab/Ziwei/DeepHM/forCompress
 mkdir $PWD/$2
 cd $PWD/$2 ##This step will direct to the $pwd/$2 and use it as the working directory later
 #gc percent
-python3 ../src/extract_feature_from_bp3.py $PWD/$1/gc5Base.sort.bedGraph ../$1/cpg_no_chrM $PWD/$1/mm9_chrom_sizes cortex_gcContent_window2
+python3 ../src/extract_feature_from_bp3.py ../$1/gc5Base.sort.bedGraph ../$1/cpg_no_chrM ../$1/mm9_chrom_sizes cortex_gcContent_window2
 #remove first 5 column (change)
 cut -f5- cortex_gcContent_window2 >cortex_gcContent_window2_cut
 
@@ -26,7 +26,7 @@ cat ../$1/ACGT_sites.bed ../$1/GCGC_sites.bed  ../$1/CCGC_sites.bed ../$1/CCGG_s
 sort -k1,1 -k2,2n four_site.bed >mre_four_site_sort.bed
 bedtools intersect -a ../$1/cpg_no_chrM -b   mre_four_site_sort.bed -u -sorted >data_inter_mreSite
 sed "s/$/\t1/" data_inter_mreSite >data_inter_mreSite_add1
-bedtools intersect -a $PWD/$1/cpg_no_chrM -b mre_four_site_sort.bed -v -sorted >data_notInter_mreSite
+bedtools intersect -a ../$1/cpg_no_chrM -b mre_four_site_sort.bed -v -sorted >data_notInter_mreSite
 sed "s/$/\t0/" data_notInter_mreSite >data_notInter_mreSite_add0
 cat data_inter_mreSite_add1 data_notInter_mreSite_add0 >data_mreSite
 sort -k1,1 -k2,2n data_mreSite >data_mreSite_sort

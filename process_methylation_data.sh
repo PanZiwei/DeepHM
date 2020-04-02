@@ -12,7 +12,6 @@ LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/projects/li-lab/Ziwei/Anaconda3/lib  #The path
 export LD_LIBRARY_PATH
 ../MethPipe/bin/mlml -v -u wgbs_format -h tab_format -o data_mlml
 
-cd $PWD/$3
 cut -f5,10 wgbs_inter_tab >wgbs_tab_cov
 paste data_mlml wgbs_tab_cov >data_mlml_cov
 cut -f1-5,8-9 data_mlml_cov >data_mlml_mc_hmc_cov

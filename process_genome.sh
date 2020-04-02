@@ -5,7 +5,7 @@ cd $PWD/$2 ##This step will direct to the $pwd/$2 and use it as the working dire
 #gc percent
 python3 ../src/extract_feature_from_bp3.py ../$1/gc5Base.sort.bedGraph ../$1/cpg_no_chrM ../$1/mm9_chrom_sizes cortex_gcContent_window2
 #remove first 5 column (change)
-cut -f5- cortex_gcContent_window2 >cortex_gcContent_window2_cut
+cut -f5 cortex_gcContent_window2 >cortex_gcContent_window2_cut
 
 #cpg num at each window
 python3 ../src/generate_cpg_window.py ../$1/cpg_no_chrM cpg_window

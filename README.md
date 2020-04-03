@@ -48,7 +48,7 @@ WGBS_data: wgbs data. Each colum lists coordinates, total methylation level, cov
 
 
 
-b. Dependencies for DeepHM include BedTools, bash, python3 and R. Please make sure these are installed and working before trying to run DeepHM.
+b. Dependencies for DeepHM include BedTools, GSL(v2.2.1), bash, python3 and R. Please make sure these are installed and working before trying to run DeepHM.
 
 
 
@@ -58,9 +58,15 @@ c. After finishing the setup, follow the steps below to run DeepH&M.
 Run following scripts in DeepHM folder by first setting PWD=`pwd`.
 
 
+
+
 1: process genomic features for mm9 or others
 
-Script: bash process_genome.sh mm9_folder genome_process_folder
+Script: 
+
+```bat
+bash process_genome.sh mm9_folder genome_process_folder
+```
 
 Inputs:
 
@@ -73,7 +79,24 @@ genome_process_folder: output folder where processed mm9 data will be stored
 
 2: process tab-seq, wgbs, medip,hmcSeal and mre data.
 
-Script: bash process_methylation_data.sh mm9_folder data_folder data_process_folder genome_process_folder
+The process data step will use ``libgsl.so.19``in **GSL shared libraries** (https://www.gnu.org/software/gsl/doc/html/usage.html#shared-libraries), you need to locate the file ``libgsl.so.19``:
+
+2.1 Installing Anaconda and GSL(v2.2.1) package
+
+2.2 Searched for ``libgsl.so.19`` and found the location: ``/path/to/library``
+
+2.3 Run the following scripts to adds the path of the library to an environment variable. This step is only valid for the current session. It will not work for other users. It will not work once you log off and on again.
+
+``bat
+LD_LIBRARY_PATH=$LD_LIBRARY_PATH: /path/to/library
+export LD_LIBRARY_PATH
+``
+
+2.4 Run the process data script:
+
+```bat
+bash process_methylation_data.sh mm9_folder data_folder data_process_folder genome_process_folder
+```
 
 Inputs:
 
@@ -86,11 +109,12 @@ data_process_folder: output folder where processed data will be stored
 genome_process_folder: processed genome folder which stores output data from step 1
 
 
-
-
 3: select high cov data, normalize and balance data .
 
-Script: bash tune_data.sh data_process_folder data_tune_folder mm9_folder
+Script: 
+```bat
+bash tune_data.sh data_process_folder data_tune_folder mm9_folder
+```
 
 Inputs:
 
@@ -105,7 +129,11 @@ mm9_folder: genome folder which stores mm9 data
 
 4: train cpg and dna model .
 
-Script: bash train_cpg_dna_model.sh data_tune_folder train_folder genome_process_folder
+Script: 
+
+```bat
+bash train_cpg_dna_model.sh data_tune_folder train_folder genome_process_folder
+```
 
 Inputs:
 
@@ -119,7 +147,11 @@ genome_process_folder: processed genome folder which stores output data from ste
 
 5: train joint model .
 
-Script: bash train_joint_model.sh train_folder cpg_model dna_model genome_process_folder
+Script: 
+
+```bat
+bash train_joint_model.sh train_folder cpg_model dna_model genome_process_folder
+```
 
 Inputs:
 
@@ -135,7 +167,11 @@ genome_process_folder: processed genome folder which stores output data from ste
 
 6: predict from cpg, dna and joint model . For predicting on current dataset, use following script.
 
-Script: bash predict_model.sh train_folder cpg_model dna_model joint_model pred_folder data_process_folder data_tune_folder mm9_folder genome_process_folder
+Script: 
+
+```bat
+bash predict_model.sh train_folder cpg_model dna_model joint_model pred_folder data_process_folder data_tune_folder mm9_folder genome_process_folder
+```
 
 Inputs:
 
@@ -168,15 +204,19 @@ Scripts:
 
 1).process data for new dataset. Input variables are same as above.
 
+```bat
 bash process_methylation_data.sh mm9_folder data_folder data_process_folder genome_process_folder
+```
 
 2).predict data for new dataset using trained model. Input variables are same as above.
 
+```bat
 bash predict_model.sh train_folder cpg_model dna_model joint_model pred_folder data_process_folder data_tune_folder mm9_folder genome_process_folder
-
+```
 
 d. An example to train DeepHM model using provided mm9 and data folder:
 
+```bat
 bash process_genome.sh mm9 genome_process_folder
 
 bash process_methylation_data.sh mm9 data data_process_folder genome_process_folder
@@ -188,4 +228,4 @@ bash train_cpg_dna_model.sh data_tune_folder train_folder genome_process_folder
 bash train_joint_model.sh train_folder cpg_model-epoch20 dna_model-epoch30 genome_process_folder
 
 bash predict_model.sh train_folder cpg_model-epoch20 dna_model-epoch30 joint_model-epoch40 pred_folder data_process_folder data_tune_folder mm9 genome_process_folder
-
+```
